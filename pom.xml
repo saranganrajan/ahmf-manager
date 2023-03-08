@@ -15,6 +15,9 @@
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>11</java.version>
+		<!-- Note:If your ACR name contains upper case characters, be sure to convert them to lower case characters. -->
+		<docker.image.prefix>saranganrajankubernetesregistry.azurecr.io</docker.image.prefix>
+		<jib-maven-plugin.version>2.5.2</jib-maven-plugin.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -63,6 +66,15 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>jib-maven-plugin</artifactId>
+				<groupId>com.google.cloud.tools</groupId>
+				<version>${jib-maven-plugin.version}</version>
+				<configuration>
+					<from> <image>adoptopenjdk/openjdk11:alpine-jre</image> </from>
+					<to> <image>${docker.image.prefix}/ahmf-manager</image> </to>
 				</configuration>
 			</plugin>
 		</plugins>

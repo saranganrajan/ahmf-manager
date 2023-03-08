@@ -44,7 +44,7 @@ public class AHMFManager {
         return auditService.updateStatus(transactionId, status);
     }
 
-    @Scheduled(fixedDelay = 1800000, initialDelay = 1800000)
+    @Scheduled(fixedDelay = 30000, initialDelay = 30000)
     public void findExecutableJobs() {
       //Find processable transactions
         List<PolicyTransactionEntity> policyTransactionEntities  = reconciliationService.getIncompleteTransactions();
