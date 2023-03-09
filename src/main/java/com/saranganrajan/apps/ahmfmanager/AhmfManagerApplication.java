@@ -5,9 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
-@EnableFeignClients("com.saranganrajan.apps.ahmfmanager")
+
+@EnableFeignClients
 @SpringBootApplication
+@EnableScheduling
 public class AhmfManagerApplication {
 
 	@Autowired

@@ -15,6 +15,9 @@
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>11</java.version>
+		<!-- Note:If your ACR name contains upper case characters, be sure to convert them to lower case characters. -->
+		<docker.image.prefix>saranganrajankubernetesregistry.azurecr.io</docker.image.prefix>
+		<jib-maven-plugin.version>2.5.2</jib-maven-plugin.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -25,7 +28,16 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>8.0.32</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-openfeign</artifactId>
+			<version>3.1.3</version>
+		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -55,6 +67,15 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>jib-maven-plugin</artifactId>
+				<groupId>com.google.cloud.tools</groupId>
+				<version>${jib-maven-plugin.version}</version>
+				<configuration>
+					<from> <image>adoptopenjdk/openjdk11:alpine-jre</image> </from>
+					<to> <image>${docker.image.prefix}/ahmf-manager</image> </to>
 				</configuration>
 			</plugin>
 		</plugins>
