@@ -46,6 +46,8 @@ public class AHMFManager {
 
     @Scheduled(fixedDelay = 30000, initialDelay = 30000)
     public void findExecutableJobs() {
+        String system = 'Salesforce';
+        checkIfTransactionsExist(system);
       //Find processable transactions
         List<PolicyTransactionEntity> policyTransactionEntities  = reconciliationService.getIncompleteTransactions();
         if(policyTransactionEntities.isEmpty()) {
@@ -58,4 +60,10 @@ log.info("No transactions to process");
         //Cleanup
         reconciliationService.cleanUpCompletedTransactions();
     }
+
+    private boolean checkIfTransactionsExist(String system) {
+        //TODO: Check if transactions exist in the system by checking the JSON File
+    }
+
+
 }
