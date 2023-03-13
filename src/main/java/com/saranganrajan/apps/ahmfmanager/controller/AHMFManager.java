@@ -1,6 +1,10 @@
 package com.saranganrajan.apps.ahmfmanager.controller;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.saranganrajan.apps.ahmfmanager.database.PolicyTransactionEntity;
+import com.saranganrajan.apps.ahmfmanager.modal.MaintenanceDetails;
+import com.saranganrajan.apps.ahmfmanager.modal.MaintenanceDetailsList;
 import com.saranganrajan.apps.ahmfmanager.service.audit.AuditService;
 import com.saranganrajan.apps.ahmfmanager.service.reconciliation.ReconciliationService;
 import com.saranganrajan.apps.ahmfmanager.service.recovery.RecoveryService;
@@ -13,7 +17,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import java.io.Reader;
+import java.lang.reflect.Type;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
+import java.util.*;
 
 @RestController
 @Slf4j
@@ -47,6 +60,7 @@ public class AHMFManager {
     @Scheduled(fixedDelay = 30000, initialDelay = 30000)
     public void findExecutableJobs() {
         String system = "Salesforce";
+        checkMaintenanceWindow(system);
         checkIfTransactionsExist(system);
       //Find processable transactions
         List<PolicyTransactionEntity> policyTransactionEntities  = reconciliationService.getIncompleteTransactions();
@@ -66,5 +80,36 @@ log.info("No transactions to process");
         return true;
     }
 
+    private boolean checkMaintenanceWindow(String system){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String CurrentDateStr = formatter.format(LocalDateTime.now());
+        try {
+            // create Gson instance
+            Gson gson = new Gson();
+            // create a reader
+            Reader reader = Files.newBufferedReader(Paths.get("/Users/vijay/Saran/Saran_Masters/ahmf-manager/src/main/resources/Maintenance.json"));
+            // convert JSON file to map
+            Type collectionType = new TypeToken<Collection<MaintenanceDetails>>(){}.getType();
+            List<MaintenanceDetails> maintenanceDetailsList = (List<MaintenanceDetails>) gson.fromJson(reader, collectionType);
+
+            for (MaintenanceDetails maintenanceDetails : maintenanceDetailsList) {
+                if(system.equals(maintenanceDetails.SystemName)){
+                    String FromDateStr = maintenanceDetails.ScheduledMaintenanceWindowFrom;
+                    String ToDateStr = maintenanceDetails.ScheduledMaintenanceWindowTo;
+                    int c1 = CurrentDateStr.compareTo(FromDateStr);
+                    int c2 = CurrentDateStr.compareTo(ToDateStr);
+                    if ((c1 >= 0 && c2 <= 0) || (c1 <= 0 && c2 >= 0)) {
+                        return true;
+                    }
+                }
+            }
+            // close reader
+            reader.close();
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return false;
+    }
 
 }

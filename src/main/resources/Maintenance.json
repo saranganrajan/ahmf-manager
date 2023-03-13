@@ -1,12 +1,10 @@
-[
-  {
-    "System": "Salesforce",
-    "ScheduledMaintenanceWindowFrom": "2023-05-10 23:59:00.",
-    "ScheduledMaintenanceWindowTo": "2023-05-10 04:00:00"
+ [{
+    "SystemName": "Salesforce",
+    "ScheduledMaintenanceWindowFrom": "2023-03-10 00:00:00",
+    "ScheduledMaintenanceWindowTo": "2023-03-12 23:59:00"
   },
   {
-    "System": "SVOCConsumer",
-    "ScheduledMaintenanceWindowFrom": "2023-05-10 21:00:00.",
-    "ScheduledMaintenanceWindowTo": "2023-05-10 05:00:00"
-  }
-]
+    "SystemName": "SVOCConsumer",
+    "ScheduledMaintenanceWindowFrom": "2023-03-10 00:00:00",
+    "ScheduledMaintenanceWindowTo": "2023-03-12 23:59:00"
+  }]
